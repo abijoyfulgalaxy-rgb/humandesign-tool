@@ -58,6 +58,13 @@ header p{color:var(--dim);font-size:13px;margin-top:4px;}
 .cstatus.def{color:var(--good);background:rgba(63,185,80,.12);}
 .cstatus.half{color:var(--warn);background:rgba(210,153,34,.12);}
 .cstatus.none{color:var(--dim);}
+.circ-group{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden;}
+.circ-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;background:var(--panel2);font-weight:700;font-size:14px;user-select:none;}
+.circ-head:hover{background:#2a3040;}
+.circ-toggle{color:var(--dim);font-size:12px;}
+.circ-body{display:none;padding:6px 10px;}
+.circ-body.open{display:block;}
+.subhead{font-size:12px;font-weight:700;color:var(--accent);margin:8px 0 4px;padding:0 2px;}
 .toolbar{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:22px auto 6px;max-width:940px;}
 button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 18px;font-size:14px;cursor:pointer;transition:all .15s;}
 button:hover{border-color:var(--accent);background:#2a3040;}
@@ -113,8 +120,8 @@ button.danger{border-color:var(--warn);color:var(--warn);}
 <div class="count-bar">已着色闸门：<span id="gateCount">0</span> / 64　·　定义通道：<span id="defCount">0</span>　·　半通道：<span id="halfCount">0</span></div>
 
 <div class="channels">
-  <h2>🔗 通道对照表</h2>
-  <div class="sub">由闸门颜色自动生成：两端都有色=定义通道，一端有色=半通道。你只需在上面点闸门选色，这里自动更新；对岸闸门用并列字段显示。</div>
+  <h2>🔗 通道对照表（按回路群分类）</h2>
+  <div class="sub">按 整合型 → 个体 → 社会 → 家族 回路群分组；由闸门颜色自动生成：两端都有色=定义通道，一端有色=半通道。你只需在上面点闸门选色，这里自动更新。</div>
   <div id="channelTable"></div>
 </div>
 
@@ -133,8 +140,20 @@ button.danger{border-color:var(--warn);color:var(--warn);}
 <div class="toast" id="toast"></div>
 
 <script>
-const ALL_CHANNELS=[
-  [1,8,"创作"],[2,14,"方向"],[3,60,"突变"],[4,63,"逻辑"],[5,15,"韵律"],[6,59,"亲密"],[7,31,"领袖"],[9,52,"专注"],[10,20,"觉醒"],[10,34,"探索"],[11,56,"好奇"],[12,22,"开放"],[13,33,"见证"],[16,48,"才华"],[17,62,"接纳"],[18,58,"完美"],[19,49,"敏感"],[20,34,"魅力"],[20,57,"直觉"],[21,45,"金钱"],[23,43,"洞见"],[24,61,"灵感"],[25,51,"自发"],[26,44,"投降"],[27,50,"保存"],[28,38,"挣扎"],[29,46,"发现"],[30,41,"渴望"],[32,54,"转化"],[34,57,"力量"],[35,36,"无常"],[37,40,"社群"],[39,55,"情绪化"],[42,53,"成熟"],[47,64,"抽象"],[10,57,"生存"]];
+const CIRCUITS=[
+  {key:'integration',name:'整合型通道',children:[{key:'integration',name:null,channels:[[10,20,'觉醒的通道'],[34,57,'力量的通道'],[10,57,'完美形式的通道'],[20,34,'魅力的通道']]}]},
+  {key:'individual',name:'个体回路群',children:[
+    {key:'knowing',name:'觉知回路',channels:[[1,8,'启发的通道'],[2,14,'炼金士的通道'],[3,60,'突变的通道'],[12,22,'开放的通道'],[23,43,'架构的通道'],[28,38,'困顿挣扎的通道'],[39,55,'情绪的通道'],[20,57,'脑波的通道'],[24,61,'觉察的通道']]},
+    {key:'center',name:'中央回路',channels:[[10,34,'探索的通道'],[25,51,'发起的通道']]}]},
+  {key:'social',name:'社会回路群',children:[
+    {key:'logic',name:'逻辑回路',channels:[[5,15,'韵律的通道'],[7,31,'创始者的通道'],[9,52,'专心的通道'],[16,48,'波长的通道'],[17,62,'接受的通道'],[18,58,'批评的通道'],[4,63,'逻辑的通道']]},
+    {key:'sensing',name:'感知回路',channels:[[11,56,'好奇的通道'],[13,33,'足智多谋的通道'],[29,46,'发现的通道'],[35,36,'无常的通道'],[30,41,'梦想家的通道'],[42,53,'成熟的通道'],[47,64,'抽象的通道']]}]},
+  {key:'tribal',name:'家族回路群',children:[
+    {key:'defense',name:'防卫回路',channels:[[6,59,'亲密的通道'],[27,50,'保存的通道']]},
+    {key:'will',name:'意志力回路',channels:[[19,49,'整合综效的通道'],[21,45,'金钱线的通道'],[32,54,'蜕变的通道'],[26,44,'投降的通道'],[37,40,'经营社群的通道']]}]}
+];
+const ALL_CHANNELS=[];const CH_INFO={};
+CIRCUITS.forEach(g=>g.children.forEach(c=>c.channels.forEach(([a,b,cn])=>{ALL_CHANNELS.push([a,b,cn]);CH_INFO[a+'-'+b]={cn:cn,g:g.name,sub:c.name};})));
 const GATE_CENTER={};
 (function(){const m={'61,63,64':'head','47,24,4,11,17,43':'ajna','62,31,8,33,16,35,20,56,45,12,23':'throat','1,2,13,7,10,46,25,15':'g','21,26,51,40':'heart','6,37,22,36,49,30,55':'emotion','57,48,28,32,50,44,18':'spleen','3,42,9,5,14,29,34,27,59':'sacral','58,52,53,60,38,39,54,41,19':'root'};for(const s in m)s.split(',').forEach(g=>GATE_CENTER[g]=m[s]);})();
 const CENTER_ORDER=['head','ajna','throat','g','spleen','sacral','heart','emotion','root'];
@@ -179,22 +198,34 @@ function centerIsDefined(cd){
     return (gateColor[String(a)]||'none')!=='none' && (gateColor[String(b)]||'none')!=='none';
   });
 }
+function channelRow(a,b,cn){
+  const ca=gateColor[String(a)]||'none', cb=gateColor[String(b)]||'none';
+  const st=channelStatus(a,b);
+  const stTxt={def:'定义通道',half:'半通道',none:'未定义'}[st];
+  const stCls={def:'def',half:'half',none:'none'}[st];
+  return '<div class="chrow"><div class="cchannel">'+a+'-'+b+'<small>'+cn+'</small></div>'
+    +'<div class="chalf"><span class="chip '+ca+'">'+a+'</span><span class="ctcenter">'+plainName[GATE_CENTER[String(a)]]+'</span></div>'
+    +'<div class="chalf"><span class="chip '+cb+'">'+b+'</span><span class="ctcenter">'+plainName[GATE_CENTER[String(b)]]+'</span></div>'
+    +'<div class="cstatus '+stCls+'">'+stTxt+'</div></div>';
+}
 function buildTable(){
   const host=document.getElementById('channelTable');
-  let rows='<div class="chrow head"><div>通道</div><div>本端闸门</div><div>对岸闸门</div><div>状态</div></div>';
-  ALL_CHANNELS.forEach(([a,b,cn])=>{
-    const ga=gatesIn(GATE_CENTER[String(a)]);
-    const gb=gatesIn(GATE_CENTER[String(b)]);
-    const ca=gateColor[String(a)]||'none', cb=gateColor[String(b)]||'none';
-    const st=channelStatus(a,b);
-    const stTxt={def:'定义通道',half:'半通道',none:'未定义'}[st];
-    const stCls={def:'def',half:'half',none:'none'}[st];
-    rows+='<div class="chrow"><div class="cchannel">'+a+'-'+b+'<small>'+cn+'</small></div>'
-      +'<div class="chalf"><span class="chip '+ca+'">'+a+'</span><span class="ctcenter">'+plainName[GATE_CENTER[String(a)]]+'</span></div>'
-      +'<div class="chalf"><span class="chip '+cb+'">'+b+'</span><span class="ctcenter">'+plainName[GATE_CENTER[String(b)]]+'</span></div>'
-      +'<div class="cstatus '+stCls+'">'+stTxt+'</div></div>';
+  let html='';
+  CIRCUITS.forEach(g=>{
+    html+='<div class="circ-group"><div class="circ-head" data-cg="'+g.key+'"><span>'+g.name+'</span><span class="circ-toggle">▾</span></div><div class="circ-body">';
+    html+='<div class="chrow head"><div>通道</div><div>本端闸门</div><div>对岸闸门</div><div>状态</div></div>';
+    g.children.forEach(c=>{
+      if(c.name)html+='<div class="subhead">'+c.name+'</div>';
+      c.channels.forEach(([a,b,cn])=>{html+=channelRow(a,b,cn);});
+    });
+    html+='</div></div>';
   });
-  host.innerHTML=rows;
+  host.innerHTML=html;
+  host.querySelectorAll('.circ-head').forEach(h=>h.addEventListener('click',()=>{
+    const body=h.parentElement.querySelector('.circ-body');const open=body.classList.contains('open');
+    body.classList.toggle('open',!open);h.querySelector('.circ-toggle').textContent=open?'▸':'▾';
+  }));
+  const first=host.querySelector('.circ-body');if(first)first.classList.add('open');
 }
 function update(){
   refreshBodies();
@@ -234,7 +265,9 @@ function generateReport(){
   ALL_CHANNELS.forEach(([a,b,cn])=>{
     const st=channelStatus(a,b);if(st==='none')return;
     const c=channelColor(a,b);
-    const line=a+'-'+b+' '+cn+'通道：'+a+'端='+colorName[c.a]+' ‖ '+b+'端='+colorName[c.b];
+    const info=CH_INFO[a+'-'+b];
+    const tag=info?('['+(info.sub?info.g+'·'+info.sub:info.g)+']'):'';
+    const line=a+'-'+b+' '+cn+tag+'：'+a+'端='+colorName[c.a]+' ‖ '+b+'端='+colorName[c.b];
     (st==='def'?defCh:halfCh).push(line);
   });
   L.push('— 定义通道（两端都有色，共'+defCh.length+'条）—');
