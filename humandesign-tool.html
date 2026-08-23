@@ -1,33 +1,26 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>人类图标注工具 · 鼎心版</title>
+<title>人类图标注工具</title>
 <style>
-:root{--bg:#111318;--panel:#1a1e27;--panel2:#222734;--line:#343a4a;--text:#e6e9f0;--dim:#8a93a6;--red:#d64541;--black:#2c3e50;--stripe:#9b59b6;--empty:#262c38;--lit:#1f6feb;--accent:#58a6ff;--good:#3fb950;--warn:#d29922;}
+:root{--bg:#111318;--panel:#1a1e27;--panel2:#222734;--line:#343a4a;--text:#e6e9f0;--dim:#8a93a6;--red:#d64541;--black:#3b4a5a;--stripe:#9b59b6;--empty:#262c38;--accent:#58a6ff;--good:#3fb950;--warn:#d29922;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6;padding:20px;}
 header{text-align:center;padding:10px 0 4px;}
 header h1{font-size:21px;letter-spacing:1px;}
 header p{color:var(--dim);font-size:13px;margin-top:4px;}
-.legend{display:flex;justify-content:center;gap:13px;flex-wrap:wrap;padding:10px 12px;margin:14px auto;max-width:860px;background:var(--panel);border:1px solid var(--line);border-radius:10px;}
+.legend{display:flex;justify-content:center;gap:13px;flex-wrap:wrap;padding:10px 12px;margin:14px auto;max-width:900px;background:var(--panel);border:1px solid var(--line);border-radius:10px;}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;}
 .swatch{width:17px;height:17px;border-radius:4px;border:1px solid var(--line);}
-.swatch.s-lit{background:var(--lit);}.swatch.s-red{background:var(--red);}.swatch.s-black{background:var(--black);}.swatch.s-stripe{background:repeating-linear-gradient(45deg,var(--stripe) 0 4px,#5b2f6b 4px 8px);}
-.config{max-width:860px;margin:14px auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
+.swatch.s-red{background:var(--red);}.swatch.s-black{background:var(--black);}.swatch.s-stripe{background:repeating-linear-gradient(45deg,var(--stripe) 0 4px,#5b2f6b 4px 8px);}
+.config{max-width:900px;margin:14px auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
 .config h2{font-size:15px;margin-bottom:10px;}
 .config-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;}
 .config-item label{display:block;font-size:12px;color:var(--dim);margin-bottom:5px;}
 .config-item select{width:100%;padding:8px 10px;font-size:13px;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:7px;}
-.toolbar{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px auto;max-width:860px;}
-button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 18px;font-size:14px;cursor:pointer;transition:all .15s;}
-button:hover{border-color:var(--accent);background:#2a3040;}
-button.primary{background:var(--accent);color:#0b0e14;border-color:var(--accent);font-weight:600;}
-button.primary:hover{background:#79b8ff;}
-button.danger{border-color:var(--warn);color:var(--warn);}
-.count-bar{text-align:center;color:var(--dim);font-size:13px;margin:8px auto;}
-.bodygraph{max-width:780px;margin:0 auto;padding:10px 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr) minmax(0,1fr);grid-template-areas:". hd ." ". aj ." ". th ." ". gg wl" "sp sa em" ". rt .";gap:10px 12px;}
+.bodygraph{max-width:820px;margin:18px auto 0;padding:10px 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr) minmax(0,1fr);grid-template-areas:". hd ." ". aj ." ". th ." ". gg wl" "sp sa em" ". rt .";gap:10px 12px;}
 #center-head{grid-area:hd;}#center-ajna{grid-area:aj;}#center-throat{grid-area:th;}#center-g{grid-area:gg;}
 #center-heart{grid-area:wl;align-self:end;}
 #center-spleen{grid-area:sp;align-self:start;}
@@ -38,57 +31,53 @@ button.danger{border-color:var(--warn);color:var(--warn);}
 .center.defined{border-color:var(--stripe);box-shadow:0 0 0 1px rgba(155,89,182,.15);}
 .center-header{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:6px;gap:6px;}
 .center-header .nm{white-space:nowrap;}
-.center-header .def-state{font-size:10px;font-weight:400;color:var(--dim);white-space:nowrap;border:1px solid var(--line);padding:1px 6px;border-radius:10px;cursor:pointer;user-select:none;}
+.center-header .def-state{font-size:10px;font-weight:400;white-space:nowrap;border:1px solid var(--line);padding:1px 6px;border-radius:10px;color:var(--dim);}
 .center-header .def-state.on{color:var(--good);border-color:var(--good);}
 .gates{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
 .gate{min-width:33px;height:33px;padding:0 4px;border-radius:17px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;cursor:pointer;border:2px solid var(--empty);background:transparent;color:var(--dim);transition:all .12s;}
 .gate:hover{transform:scale(1.1);}
-.gate.lit{background:var(--lit);border-color:var(--lit);color:#fff;font-weight:700;}
-.channels{max-width:900px;margin:20px auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;}
+.gate.red{background:var(--red);border-color:var(--red);color:#fff;font-weight:700;}
+.gate.black{background:var(--black);border-color:var(--black);color:#cdd3e0;font-weight:700;}
+.gate.stripe{background:repeating-linear-gradient(45deg,var(--stripe) 0 5px,#5b2f6b 5px 10px);border-color:var(--stripe);color:#fff;font-weight:700;}
+.channels{max-width:940px;margin:20px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;}
 .channels h2{font-size:16px;margin-bottom:4px;}
 .channels .sub{color:var(--dim);font-size:12px;margin-bottom:14px;}
-.channel-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);flex-wrap:wrap;}
-.channel-row:last-child{border-bottom:none;}
-.cc-group{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden;}
-.cc-head{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;cursor:pointer;background:var(--panel2);font-weight:600;font-size:14px;user-select:none;}
-.cc-head:hover{background:#2a3040;}
-.cc-toggle{color:var(--dim);font-size:12px;}
-.cc-body{display:none;padding:8px 12px;}
-.cc-body.open{display:block;}
-.cc-body .cc-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);flex-wrap:wrap;}
-.cc-body .cc-row:last-child{border-bottom:none;}
-.cc-body .channel-name{width:60px;font-weight:600;font-size:14px;flex-shrink:0;}
-.cc-body .channel-cn{width:96px;color:var(--dim);font-size:12px;flex-shrink:0;}
-.cc-body .seg{width:52px;height:26px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;user-select:none;border:1px solid var(--line);background:var(--panel2);color:var(--dim);}
-.cc-body .seg.none{background:transparent;border-style:dashed;color:var(--dim);}
-.cc-body .seg.red{background:var(--red);color:#fff;border-color:var(--red);}
-.cc-body .seg.black{background:var(--black);color:#cdd3e0;border-color:var(--black);}
-.cc-body .seg.stripe{background:repeating-linear-gradient(45deg,var(--stripe) 0 5px,#5b2f6b 5px 10px);color:#fff;border-color:var(--stripe);}
-.cc-body .seg-tip{font-size:11px;color:var(--dim);flex:1;}
-.channel-name{width:60px;font-weight:600;font-size:14px;flex-shrink:0;}
-.channel-cn{width:84px;color:var(--dim);font-size:12px;flex-shrink:0;}
-.half{display:flex;align-items:center;gap:6px;flex:1;min-width:210px;}
-.half-end{font-size:12px;color:var(--dim);font-weight:600;flex-shrink:0;width:30px;}
-.seg{width:52px;height:26px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;user-select:none;border:1px solid var(--line);background:var(--panel2);color:var(--dim);transition:all .1s;}
-.seg.none{background:transparent;border-style:dashed;color:var(--dim);}
-.seg.red{background:var(--red);color:#fff;border-color:var(--red);}
-.seg.black{background:var(--black);color:#cdd3e0;border-color:var(--black);}
-.seg.stripe{background:repeating-linear-gradient(45deg,var(--stripe) 0 5px,#5b2f6b 5px 10px);color:#fff;border-color:var(--stripe);}
-.seg-link{color:var(--dim);font-size:14px;flex-shrink:0;}
-.seg-tip{font-size:10px;color:var(--dim);width:60px;flex-shrink:0;}
-.output{max-width:900px;margin:20px auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;}
+.chanlist{border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+.chrow{display:grid;grid-template-columns:1.4fr 1.5fr 1.5fr 1fr;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid var(--line);font-size:13px;}
+.chrow:last-child{border-bottom:none;}
+.chrow.head{background:var(--panel2);font-weight:700;color:var(--dim);font-size:12px;}
+.cchannel{font-weight:600;}
+.cchannel small{color:var(--dim);font-weight:400;display:block;font-size:11px;}
+.chalf{display:flex;align-items:center;gap:6px;}
+.chip{min-width:28px;height:24px;padding:0 5px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:1px solid var(--line);background:transparent;color:var(--dim);}
+.chip.red{background:var(--red);border-color:var(--red);color:#fff;}
+.chip.black{background:var(--black);border-color:var(--black);color:#cdd3e0;}
+.chip.stripe{background:repeating-linear-gradient(45deg,var(--stripe) 0 5px,#5b2f6b 5px 10px);border-color:var(--stripe);color:#fff;}
+.ctcenter{color:var(--dim);font-size:11px;}
+.cstatus{font-weight:700;text-align:center;border-radius:6px;padding:2px 6px;}
+.cstatus.def{color:var(--good);background:rgba(63,185,80,.12);}
+.cstatus.half{color:var(--warn);background:rgba(210,153,34,.12);}
+.cstatus.none{color:var(--dim);}
+.toolbar{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:22px auto 6px;max-width:940px;}
+button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 18px;font-size:14px;cursor:pointer;transition:all .15s;}
+button:hover{border-color:var(--accent);background:#2a3040;}
+button.primary{background:var(--accent);color:#0b0e14;border-color:var(--accent);font-weight:600;}
+button.primary:hover{background:#79b8ff;}
+button.danger{border-color:var(--warn);color:var(--warn);}
+.count-bar{text-align:center;color:var(--dim);font-size:13px;margin:10px auto;max-width:940px;}
+.output{max-width:940px;margin:6px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;}
 .output h2{font-size:16px;margin-bottom:10px;}
 #report{width:100%;min-height:200px;background:#0d1017;color:#c8d1e0;border:1px solid var(--line);border-radius:8px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.5;white-space:pre-wrap;resize:vertical;}
 .copy-btn-wrap{text-align:center;margin-top:10px;}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--good);color:#0b0e14;padding:10px 20px;border-radius:20px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:99;}
 .toast.show{opacity:1;}
-@media(max-width:620px){.bodygraph{grid-template-columns:1fr;grid-template-areas:"hd" "aj" "th" "wl" "gg" "sp" "em" "sa" "rt";}#center-sacral{margin-top:0;}}
+@media(max-width:620px){.bodygraph{grid-template-columns:1fr;grid-template-areas:"hd" "aj" "th" "wl" "gg" "sp" "em" "sa" "rt";}#center-sacral{margin-top:0;}.chrow{grid-template-columns:1fr 1fr 1fr;}}
 </style>
 </head>
 <body>
 <header>
-  <h1>🕉 人类图标注工具 · 鼎心版</h1>
-  <p>按鼎心布局：点闸门点亮/熄灭，点通道两端色块选色 → 一键生成标注报告</p>
+  <h1>🕉 人类图标注工具</h1>
+  <p>点闸门选色（无色→红→黑→条纹），中心和通道自动推导 → 拉到底生成报告</p>
 </header>
 
 <div class="config">
@@ -113,11 +102,20 @@ button.danger{border-color:var(--warn);color:var(--warn);}
 </div>
 
 <div class="legend">
-  <div class="legend-item"><span class="swatch"></span> 空心·未点亮/未定义</div>
-  <div class="legend-item"><span class="swatch s-lit"></span> 点亮·闸门激活</div>
+  <div class="legend-item"><span class="swatch"></span> 无色·未激活</div>
   <div class="legend-item"><span class="swatch s-red"></span> 红·潜意识</div>
   <div class="legend-item"><span class="swatch s-black"></span> 黑·意识</div>
-  <div class="legend-item"><span class="swatch s-stripe"></span> 条纹·红黑相间</div>
+  <div class="legend-item"><span class="swatch s-stripe"></span> 条纹·红黑相间(双重)</div>
+</div>
+
+<div class="bodygraph" id="bodygraph"></div>
+
+<div class="count-bar">已着色闸门：<span id="gateCount">0</span> / 64　·　定义通道：<span id="defCount">0</span>　·　半通道：<span id="halfCount">0</span></div>
+
+<div class="channels">
+  <h2>🔗 通道对照表</h2>
+  <div class="sub">由闸门颜色**自动生成**：两端都有色=定义通道，一端有色=半通道。你只需在上面点闸门选色，这里自动更新；对岸闸门用并列字段显示。</div>
+  <div id="channelTable"></div>
 </div>
 
 <div class="toolbar">
@@ -125,103 +123,10 @@ button.danger{border-color:var(--warn);color:var(--warn);}
   <button onclick="downloadReport()">💾 下载.txt</button>
   <button class="danger" onclick="resetAll()">🗑 清空</button>
 </div>
-<div class="count-bar">点亮闸门：<span id="gapCount">0</span> / 64　·　已着色通道半段：<span id="segCount">0</span></div>
-
-<div class="bodygraph">
-  <div class="center" id="center-head">
-    <div class="center-header"><span class="nm">🧠 头脑</span><span class="def-state" data-center="head" onclick="cycleCenterDef(this)">未定义</span></div>
-    <div class="gates">
-      <div class="gate" data-gate="61">61</div><div class="gate" data-gate="63">63</div>
-      <div class="gate" data-gate="64">64</div>
-    </div>
-  </div>
-
-  <div class="center" id="center-ajna">
-    <div class="center-header"><span class="nm">🧿 逻辑(Ajna)</span><span class="def-state" data-center="ajna" onclick="cycleCenterDef(this)">未定义</span></div>
-    <div class="gates">
-      <div class="gate" data-gate="47">47</div><div class="gate" data-gate="24">24</div><div class="gate" data-gate="4">4</div>
-      <div class="gate" data-gate="11">11</div><div class="gate" data-gate="17">17</div>
-      <div class="gate" data-gate="43">43</div>
-    </div>
-  </div>
-
-  <div class="center" id="center-throat">
-    <div class="center-header"><span class="nm">🎤 喉咙</span><span class="def-state" data-center="throat" onclick="cycleCenterDef(this)">未定义</span></div>
-    <div class="gates">
-      <div class="gate" data-gate="62">62</div><div class="gate" data-gate="31">31</div><div class="gate" data-gate="8">8</div>
-      <div class="gate" data-gate="33">33</div><div class="gate" data-gate="16">16</div><div class="gate" data-gate="35">35</div>
-      <div class="gate" data-gate="20">20</div><div class="gate" data-gate="56">56</div><div class="gate" data-gate="45">45</div><div class="gate" data-gate="12">12</div><div class="gate" data-gate="23">23</div>
-    </div>
-  </div>
-
-  <div class="center" id="center-g">
-    <div class="center-header"><span class="nm">🧭 G</span><span class="def-state" data-center="g" onclick="cycleCenterDef(this)">未定义</span></div>
-    <div class="gates">
-      <div class="gate" data-gate="1">1</div><div class="gate" data-gate="2">2</div>
-      <div class="gate" data-gate="13">13</div><div class="gate" data-gate="7">7</div>
-      <div class="gate" data-gate="10">10</div><div class="gate" data-gate="46">46</div>
-      <div class="gate" data-gate="25">25</div><div class="gate" data-gate="15">15</div>
-    </div>
-  </div>
-
-  <div class="center" id="center-heart">
-    <div class="center-header"><span class="nm">💛 意志力</span><span class="def-state" data-center="heart" onclick="cycleCenterDef(this)">未定义</span></div>
-    <div class="gates">
-      <div class="gate" data-gate="21">21</div><div class="gate" data-gate="26">26</div>
-      <div class="gate" data-gate="51">51</div><div class="gate" data-gate="40">40</div>
-    </div>
-  </div>
-
-  <div class="center" id="center-spleen">
-    <div class="center-header"><span class="nm">🩺 直觉</span><span class="def-state" data-center="spleen" onclick="cycleCenterDef(this)">未定义</span></div>
-    <div class="gates">
-      <div class="gate" data-gate="57">57</div><div class="gate" data-gate="48">48</div>
-      <div class="gate" data-gate="28">28</div>
-      <div class="gate" data-gate="32">32</div><div class="gate" data-gate="50">50</div>
-      <div class="gate" data-gate="44">44</div><div class="gate" data-gate="18">18</div>
-    </div>
-  </div>
-
-  <div class="center" id="center-sacral">
-    <div class="center-header"><span class="nm">⚡ 荐骨</span><span class="def-state" data-center="sacral" onclick="cycleCenterDef(this)">未定义</span></div>
-    <div class="gates">
-      <div class="gate" data-gate="3">3</div><div class="gate" data-gate="42">42</div><div class="gate" data-gate="9">9</div>
-      <div class="gate" data-gate="5">5</div><div class="gate" data-gate="14">14</div><div class="gate" data-gate="29">29</div>
-      <div class="gate" data-gate="34">34</div><div class="gate" data-gate="27">27</div><div class="gate" data-gate="59">59</div>
-    </div>
-  </div>
-
-  <div class="center" id="center-emotion">
-    <div class="center-header"><span class="nm">🌊 情绪</span><span class="def-state" data-center="emotion" onclick="cycleCenterDef(this)">未定义</span></div>
-    <div class="gates">
-      <div class="gate" data-gate="6">6</div>
-      <div class="gate" data-gate="37">37</div><div class="gate" data-gate="22">22</div>
-      <div class="gate" data-gate="49">49</div><div class="gate" data-gate="30">30</div>
-      <div class="gate" data-gate="36">36</div><div class="gate" data-gate="55">55</div>
-    </div>
-  </div>
-
-  <div class="center" id="center-root">
-    <div class="center-header"><span class="nm">🌱 根部</span><span class="def-state" data-center="root" onclick="cycleCenterDef(this)">未定义</span></div>
-    <div class="gates">
-      <div class="gate" data-gate="58">58</div><div class="gate" data-gate="52">52</div>
-      <div class="gate" data-gate="53">53</div><div class="gate" data-gate="60">60</div>
-      <div class="gate" data-gate="38">38</div><div class="gate" data-gate="39">39</div>
-      <div class="gate" data-gate="54">54</div><div class="gate" data-gate="41">41</div>
-      <div class="gate" data-gate="19">19</div>
-    </div>
-  </div>
-</div>
-
-<div class="channels">
-  <h2>🔗 通道标注：按中心分类</h2>
-  <div class="sub">点一个中心 → 只看“从它连出去的通道”，每条只标<b>它这一端</b>的颜色（点色块循环：无色→红→黑→条纹→无色）。另一端会在他中心出现时再标。顺着图从头脑往下逐格标注即可。</div>
-  <div id="centerChannels"></div>
-</div>
 
 <div class="output">
   <h2>📋 标注报告</h2>
-  <div id="report" contenteditable="false"></div>
+  <div id="report"></div>
   <div class="copy-btn-wrap"><button class="primary" onclick="copyReport()">📋 复制报告</button></div>
 </div>
 
@@ -232,78 +137,123 @@ const ALL_CHANNELS=[
   [1,8,"创作"],[2,14,"方向"],[3,60,"突变"],[4,63,"逻辑"],[5,15,"韵律"],[6,59,"亲密"],[7,31,"领袖"],[9,52,"专注"],[10,20,"觉醒"],[10,34,"探索"],[11,56,"好奇"],[12,22,"开放"],[13,33,"见证"],[16,48,"才华"],[17,62,"接纳"],[18,58,"完美"],[19,49,"敏感"],[20,34,"魅力"],[20,57,"直觉"],[21,45,"金钱"],[23,43,"洞见"],[24,61,"灵感"],[25,51,"自发"],[26,44,"投降"],[27,50,"保存"],[28,38,"挣扎"],[29,46,"发现"],[30,41,"渴望"],[32,54,"转化"],[34,57,"力量"],[35,36,"无常"],[37,40,"社群"],[39,55,"情绪化"],[42,53,"成熟"],[47,64,"抽象"],[10,57,"生存"]];
 const GATE_CENTER={};
 (function(){const m={'61,63,64':'head','47,24,4,11,17,43':'ajna','62,31,8,33,16,35,20,56,45,12,23':'throat','1,2,13,7,10,46,25,15':'g','21,26,51,40':'heart','6,37,22,36,49,30,55':'emotion','57,48,28,32,50,44,18':'spleen','3,42,9,5,14,29,34,27,59':'sacral','58,52,53,60,38,39,54,41,19':'root'};for(const s in m)s.split(',').forEach(g=>GATE_CENTER[g]=m[s]);})();
-const SEG_ORDER=['none','red','black','stripe'];
-const segName={none:'无色',red:'红',black:'黑',stripe:'条纹'};
-const gateLit={},centerDef={},segState={};
-function init(){
-  document.querySelectorAll('.gate').forEach(g=>{g.addEventListener('click',()=>{const n=g.dataset.gate;gateLit[n]=!gateLit[n];g.classList.toggle('lit',!!gateLit[n]);updateCounts();});});
-  // 建立中心顺序 + 每中心闸门
-  const CENTER_ORDER=['head','ajna','throat','g','spleen','sacral','heart','emotion','root'];
-  const centerName={head:'🧠 头脑',ajna:'🧿 逻辑(Ajna)',throat:'🎤 喉咙',g:'🧭 G',heart:'💛 意志力',emotion:'🌊 情绪',spleen:'🩺 直觉',sacral:'⚡ 荐骨',root:'🌱 根部'};
-  const host=document.getElementById('centerChannels');
+const CENTER_ORDER=['head','ajna','throat','g','spleen','sacral','heart','emotion','root'];
+const centerName={head:'🧠 头脑',ajna:'🧿 逻辑(Ajna)',throat:'🎤 喉咙',g:'🧭 G',heart:'💛 意志力',emotion:'🌊 情绪',spleen:'🩺 直觉',sacral:'⚡ 荐骨',root:'🌱 根部'};
+const plainName={head:'头脑',ajna:'逻辑(Ajna)',throat:'喉咙',g:'G',heart:'意志力(心脏)',emotion:'情绪',spleen:'直觉(脾脏)',sacral:'荐骨',root:'根部'};
+const COLOR_ORDER=['none','red','black','stripe'];
+const colorName={none:'无色',red:'红',black:'黑',stripe:'条纹'};
+const gateColor={}; // gate# -> 'none'|'red'|'black'|'stripe'
+
+function gatesIn(c){return Object.keys(GATE_CENTER).filter(g=>GATE_CENTER[g]===c);}
+function channelColor(a,b){return {a:gateColor[String(a)]||'none', b:gateColor[String(b)]||'none'};}
+function channelStatus(a,b){const c=channelColor(a,b);const na=c.a==='none',nb=c.b==='none';return (na&&nb)?'none':((na||nb)?'half':'def');}
+
+function buildBody(){
+  const host=document.getElementById('bodygraph');
+  let html='';
   CENTER_ORDER.forEach(cd=>{
-    // 该中心含的闸门
-    const gates=Object.keys(GATE_CENTER).filter(g=>GATE_CENTER[g]===cd);
-    const div=document.createElement('div');div.className='cc-group';
-    let ghead='<div class="cc-head" data-cg="'+cd+'"><span>'+centerName[cd]+'</span><span class="cc-toggle">▾</span></div>';
-    let rows='';
-    ALL_CHANNELS.forEach(([a,b,cn])=>{
-      let half=null;
-      if(gates.includes(String(a)))half='a';
-      else if(gates.includes(String(b)))half='b';
-      if(!half)return;
-      const key=a+'-'+b;
-      segState[key]=segState[key]||{a:'none',b:'none'};
-      const myGate=(half==='a'?a:b);
-      const other=(half==='a'?b:a);
-      const otherN=GATE_CENTER[String(other)]?centerName[GATE_CENTER[String(other)]].replace(/^.. /,''):'';
-      rows+='<div class="cc-row"><div class="channel-name">'+myGate+'-'+other+'</div><div class="channel-cn">'+cn+'通道</div><div class="seg none" data-key="'+key+'" data-half="'+half+'">无色</div><div class="seg-tip" style="width:auto;">→ 对面:'+other+'号('+otherN+')</div></div>';
-    });
-    div.innerHTML=ghead+'<div class="cc-body">'+rows+'</div>';
-    host.appendChild(div);
+    const g=gatesIn(cd).sort((x,y)=>+x-+y).map(g=>'<div class="gate none" data-gate="'+g+'">'+g+'</div>').join('');
+    html+='<div class="center" id="center-'+cd+'"><div class="center-header"><span class="nm">'+centerName[cd]+'</span><span class="def-state">开放</span></div><div class="gates">'+g+'</div></div>';
   });
-  // 收起/展开 & 色块事件（事件委托）
-  document.querySelectorAll('.cc-head').forEach(h=>h.addEventListener('click',()=>{
-    const body=h.parentElement.querySelector('.cc-body');
-    const open=body.classList.contains('open');
-    body.classList.toggle('open',!open);
-    h.querySelector('.cc-toggle').textContent=open?'▸':'▾';
-  }));
-  document.getElementById('centerChannels').addEventListener('click',(e)=>{
-    const seg=e.target.closest('.seg');
-    if(!seg)return;
-    const k=seg.dataset.key,h=seg.dataset.half;
-    const next=SEG_ORDER[(SEG_ORDER.indexOf(segState[k][h])+1)%SEG_ORDER.length];
-    segState[k][h]=next;seg.className='seg '+next;seg.textContent=segName[next];updateCounts();
-  });
-  // 默认展开第一个中心
-  const first=host.querySelector('.cc-body');if(first)first.classList.add('open');
-  document.querySelectorAll('.def-state').forEach(el=>{centerDef[el.dataset.center]='n';el.textContent='未定义';});
-  updateCounts();
+  host.innerHTML=html;
 }
-function cycleCenterDef(el){const c=el.dataset.center;centerDef[c]=(centerDef[c]==='y')?'n':'y';el.textContent=centerDef[c]==='y'?'✓ 定义':'未定义';el.classList.toggle('on',centerDef[c]==='y');el.closest('.center').classList.toggle('defined',centerDef[c]==='y');updateCounts();}
-function updateCounts(){document.getElementById('gapCount').textContent=Object.keys(gateLit).filter(k=>gateLit[k]).length;let s=0;for(const k in segState){if(segState[k].a!=='none')s++;if(segState[k].b!=='none')s++;}document.getElementById('segCount').textContent=s;}
+function refreshBodies(){
+  CENTER_ORDER.forEach(cd=>{
+    const card=document.getElementById('center-'+cd);
+    if(!card)return;
+    card.querySelectorAll('.gate').forEach(g=>{
+      const c=gateColor[g.dataset.gate]||'none';
+      g.className='gate '+c;
+    });
+    const state=card.querySelector('.def-state');
+    const d=centerIsDefined(cd);
+    state.textContent=d?'✓ 定义':'开放';
+    state.classList.toggle('on',d);
+    card.classList.toggle('defined',d);
+  });
+}
+function centerIsDefined(cd){
+  const g=gatesIn(cd).map(String);
+  return ALL_CHANNELS.some(([a,b])=>{
+    if(!(g.includes(String(a))||g.includes(String(b))))return false;
+    return (gateColor[String(a)]||'none')!=='none' && (gateColor[String(b)]||'none')!=='none';
+  });
+}
+function buildTable(){
+  const host=document.getElementById('channelTable');
+  let rows='<div class="chrow head"><div>通道</div><div>本端闸门</div><div>对岸闸门</div><div>状态</div></div>';
+  ALL_CHANNELS.forEach(([a,b,cn])=>{
+    const ga=gatesIn(GATE_CENTER[String(a)]);
+    const gb=gatesIn(GATE_CENTER[String(b)]);
+    const ca=gateColor[String(a)]||'none', cb=gateColor[String(b)]||'none';
+    const st=channelStatus(a,b);
+    const stTxt={def:'定义通道',half:'半通道',none:'未定义'}[st];
+    const stCls={def:'def',half:'half',none:'none'}[st];
+    rows+='<div class="chrow"><div class="cchannel">'+a+'-'+b+'<small>'+cn+'</small></div>'
+      +'<div class="chalf"><span class="chip '+ca+'">'+a+'</span><span class="ctcenter">'+plainName[GATE_CENTER[String(a)]]+'</span></div>'
+      +'<div class="chalf"><span class="chip '+cb+'">'+b+'</span><span class="ctcenter">'+plainName[GATE_CENTER[String(b)]]+'</span></div>'
+      +'<div class="cstatus '+stCls+'">'+stTxt+'</div></div>';
+  });
+  host.innerHTML=rows;
+}
+function update(){
+  refreshBodies();
+  buildTable();
+  let g=0,def=0,half=0;
+  for(const k in gateColor){if(gateColor[k]!=='none')g++;}
+  ALL_CHANNELS.forEach(([a,b])=>{const st=channelStatus(a,b);if(st==='def')def++;else if(st==='half')half++;});
+  document.getElementById('gateCount').textContent=g;
+  document.getElementById('defCount').textContent=def;
+  document.getElementById('halfCount').textContent=half;
+}
+function cycleColor(g){
+  const cur=gateColor[g]||'none';
+  const next=COLOR_ORDER[(COLOR_ORDER.indexOf(cur)+1)%COLOR_ORDER.length];
+  if(next==='none')delete gateColor[g];else gateColor[g]=next;
+  update();
+}
 function generateReport(){
-  const L=[];L.push('【人类图标注报告 · 鼎心版】');L.push('标注人：阿比特');L.push('');
-  const names={head:'头脑',ajna:'逻辑(Ajna)',throat:'喉咙',g:'G',heart:'意志力(心脏)',emotion:'情绪',spleen:'直觉(脾脏)',sacral:'荐骨',root:'根部'};
+  const L=[];
+  L.push('【人类图标注报告】');L.push('');
   const v=id=>document.getElementById(id).value;
   const cfg=[['类型',v('cfg-type')],['内在权威',v('cfg-authority')],['人生角色',v('cfg-profile')],['定义',v('cfg-definition')],['策略',v('cfg-strategy')]].filter(x=>x[1]);
   L.push('— 基础配置 —');if(cfg.length)cfg.forEach(c=>L.push(c[0]+'：'+c[1]));else L.push('（未填写）');L.push('');
-  L.push('— 中心定义状态 —');const def=[],op=[];for(const c in names)(centerDef[c]==='y'?def:op).push(names[c]);
-  L.push('定义中心：'+(def.join('、')||'无'));L.push('开放中心：'+(op.join('、')||'无'));L.push('');
-  L.push('— 点亮闸门（已激活）—');const lit=Object.keys(gateLit).filter(g=>gateLit[g]).map(Number).sort((a,b)=>a-b);
-  L.push(lit.length?('总数 '+lit.length+' 个：'+lit.join(', ')):'（无）');L.push('');
-  L.push('— 通道及两段颜色 —');let any=false;
-  for(const key in segState){const a=+key.split('-')[0],b=+key.split('-')[1];const sa=segState[key].a,sb=segState[key].b;if(sa==='none'&&sb==='none')continue;any=true;const cn=(ALL_CHANNELS.find(c=>c[0]===a&&c[1]===b)||[])[2]||'';L.push(key+' '+cn+'通道：'+a+'端='+segName[sa]+' ‖ '+b+'端='+segName[sb]);}
-  if(!any)L.push('（未标注任何有色通道，全部无色）');L.push('');
-  L.push('— 提示 —');L.push('· 两端都无色 = 通道未定义');L.push('· 一段有色 = 半通道(另一端待补)');L.push('· 两端都有色 = 定义通道');L.push('· 红=潜意识，黑=意识，条纹=两侧激活');L.push('');
-  document.getElementById('report').textContent=L.join('\n');toast('报告已生成');
+  const def=[],open=[];
+  CENTER_ORDER.forEach(c=>(centerIsDefined(c)?def:open).push(plainName[c]));
+  L.push('— 中心定义状态（自动）—');
+  L.push('定义中心：'+(def.join('、')||'无'));
+  L.push('开放中心：'+(open.join('、')||'无'));L.push('');
+  const byColor={red:[],black:[],stripe:[]};
+  for(const g in gateColor){if(gateColor[g]!=='none')byColor[gateColor[g]].push(Number(g));}
+  ['red','black','stripe'].forEach(c=>byColor[c].sort((a,b)=>a-b));
+  L.push('— 点亮闸门及颜色（自动）—');
+  let anyGate=false;
+  ['red','black','stripe'].forEach(c=>{if(byColor[c].length){anyGate=true;L.push('● '+colorName[c]+'('+(c==='red'?'潜意识':c==='black'?'意识':'双重')+')：'+byColor[c].join(', '));}});
+  if(!anyGate)L.push('（无点亮闸门）');L.push('');
+  const defCh=[],halfCh=[];
+  ALL_CHANNELS.forEach(([a,b,cn])=>{
+    const st=channelStatus(a,b);if(st==='none')return;
+    const c=channelColor(a,b);
+    const line=a+'-'+b+' '+cn+'通道：'+a+'端='+colorName[c.a]+' ‖ '+b+'端='+colorName[c.b];
+    (st==='def'?defCh:halfCh).push(line);
+  });
+  L.push('— 定义通道（两端都有色，共'+defCh.length+'条）—');
+  if(defCh.length)defCh.forEach(x=>L.push(x));else L.push('（无）');L.push('');
+  L.push('— 半通道（仅一端有色，共'+halfCh.length+'条）—');
+  if(halfCh.length)halfCh.forEach(x=>L.push(x));else L.push('（无）');L.push('');
+  L.push('— 提示 —');
+  L.push('· 两端都有色 = 定义中心中的定义通道');
+  L.push('· 一端有色 = 半通道（对岸闸门待补）');
+  L.push('· 红=潜意识，黑=意识，条纹=红黑双重');
+  document.getElementById('report').textContent=L.join('\n');
+  toast('报告已生成');
+  document.getElementById('report').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function downloadReport(){const el=document.getElementById('report');if(!el.textContent)generateReport();const b=new Blob([el.textContent],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='人类图标注_'+new Date().toISOString().slice(0,10)+'.txt';a.click();URL.revokeObjectURL(a.href);}
 function copyReport(){const el=document.getElementById('report');if(!el.textContent)generateReport();navigator.clipboard.writeText(el.textContent).then(()=>toast('已复制')).catch(()=>toast('复制失败，请手动复制'));}
-function resetAll(){if(!confirm('清空所有标注？'))return;for(const k in segState)segState[k]={a:'none',b:'none'};for(const k in gateLit)delete gateLit[k];document.querySelectorAll('.gate').forEach(g=>g.classList.remove('lit'));document.querySelectorAll('.seg').forEach(s=>{s.className='seg none';s.textContent='无色';});updateCounts();document.getElementById('report').textContent='';toast('已清空');}
+function resetAll(){if(!confirm('清空所有标注？'))return;for(const k in gateColor)delete gateColor[k];update();document.getElementById('report').textContent='';toast('已清空');}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800);}
-init();
+(function(){buildBody();document.getElementById('bodygraph').addEventListener('click',e=>{const g=e.target.closest('.gate');if(g)cycleColor(g.dataset.gate);});update();})();
 </script>
 </body>
 </html>
